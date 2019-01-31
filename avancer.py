@@ -1,43 +1,61 @@
 import time
 #      _____
-# G1 <[     ]> D1
-# G2 <[     ]> D2
-# G3 <[_____]> D3
+# L1 <[     ]> R1
+# L2 <[     ]> R2
+# L3 <[_____]> R3
 #
 #
 
 
-def avancer_patte(cote, numero):
-    print("j'avance " + cote + " " + numero)
+def leg_forward(side, number):
+    print("j'avance " + side + " " + number)
     # soulever la patte
     # avancer la patte
     # reposer la patte
 
 
-def reculer_patte(cote, numero):
-    print("je recule " + cote + " " + numero)
+def leg_backward(side, number):
+    print("je recule " + side + " " + number)
     # soulever la patte
     # reculer la patte
     # reposer la patte
 
 
-def avancer():
-    avancer_patte('g', 1)
-    avancer_patte('d', 2)
-    avancer_patte('g', 3)
-    time.sleep(1)
-    avancer_patte('d', 1)
-    avancer_patte('g', 2)
-    avancer_patte('d', 3)
+def initial_position(side, number):
+    print("je suis en position initiale " + side + " " + number)
+    # ramener la patte sans la soulever
+    # ne rien faire si deja en position initiale
 
 
-def reculer():
-    reculer_patte('g', 1)
-    reculer_patte('d', 2)
-    reculer_patte('g', 3)
+def walking_forward():
+    leg_forward('g', 1)
+    leg_forward('d', 2)
+    leg_forward('g', 3)
+    initial_position('d', 1)
+    initial_position('g', 2)
+    initial_position('d', 3)
     time.sleep(1)
-    reculer_patte('d', 1)
-    reculer_patte('g', 2)
-    reculer_patte('d', 3)
+    leg_forward('d', 1)
+    leg_forward('g', 2)
+    leg_forward('d', 3)
+    initial_position('g', 1)
+    initial_position('d', 2)
+    initial_position('g', 3)
+
+
+def walking_backward():
+    leg_backward('g', 1)
+    leg_backward('d', 2)
+    leg_backward('g', 3)
+    initial_position('d', 1)
+    initial_position('g', 2)
+    initial_position('d', 3)
+    time.sleep(1)
+    leg_backward('d', 1)
+    leg_backward('g', 2)
+    leg_backward('d', 3)
+    initial_position('g', 1)
+    initial_position('d', 2)
+    initial_position('g', 3)
 
 

@@ -1,52 +1,53 @@
 import time
 #      _____
-# G1 <[     ]> D1
-# G2 <[     ]> D2
-# G3 <[_____]> D3
+# L1 <[     ]> R1
+# L2 <[     ]> R2
+# L3 <[_____]> R3
+#
 #
 
 
-def deplier_patte(cote, numero):
-    print(cote+numero+" depliee")
+def unfold_leg(side, number):
+    print(side+number+" depliee")
     # soulever la patte
     # déplier la patte (différent selon gauche ou droite ?)
     # reposer la patte
 
 
-def replier_patte(cote, numero):
-    print(cote+numero+" repliee")
+def fold_leg(side, number):
+    print(side+number+" repliee")
     # soulever la patte
     # replier la patte (différent selon gauche ou droite ?)
     # reposer la patte
 
 
-def crabe_a_droite():
-    replier_patte('g', 1)
-    replier_patte('g', 3)
-    replier_patte('d', 2)
-    deplier_patte('d', 1)
-    deplier_patte('d', 3)
-    deplier_patte('g', 2)
+def crab_right():
+    fold_leg('g', 1)
+    fold_leg('g', 3)
+    fold_leg('d', 2)
+    unfold_leg('d', 1)
+    unfold_leg('d', 3)
+    unfold_leg('g', 2)
     time.sleep(1)
-    replier_patte('d', 1)
-    replier_patte('d', 3)
-    replier_patte('g', 2)
-    deplier_patte('g', 1)
-    deplier_patte('g', 3)
-    deplier_patte('d', 2)
+    fold_leg('d', 1)
+    fold_leg('d', 3)
+    fold_leg('g', 2)
+    unfold_leg('g', 1)
+    unfold_leg('g', 3)
+    unfold_leg('d', 2)
 
 
-def crabe_a_gauche():
-    replier_patte('d', 1)
-    replier_patte('d', 3)
-    replier_patte('g', 2)
-    deplier_patte('g', 1)
-    deplier_patte('g', 3)
-    deplier_patte('d', 2)
+def crab_left():
+    fold_leg('d', 1)
+    fold_leg('d', 3)
+    fold_leg('g', 2)
+    unfold_leg('g', 1)
+    unfold_leg('g', 3)
+    unfold_leg('d', 2)
     time.sleep(1)
-    replier_patte('g', 1)
-    replier_patte('g', 3)
-    replier_patte('d', 2)
-    deplier_patte('d', 1)
-    deplier_patte('d', 3)
-    deplier_patte('g', 2)
+    fold_leg('g', 1)
+    fold_leg('g', 3)
+    fold_leg('d', 2)
+    unfold_leg('d', 1)
+    unfold_leg('d', 3)
+    unfold_leg('g', 2)
