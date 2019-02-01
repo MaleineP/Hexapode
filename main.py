@@ -30,16 +30,17 @@ class Interface(QDialog):
         self.label = label
 
 
-    def createInterface(self):
-        self.topLeftGroupBox = QGroupBox("Interface")
-        layout = QVBoxLayout()
+    def paintEvent(self, event = None):
         paint = QPainter()
         paint.begin(self)
         paint.setPen(Qt.green)
         paint.setBrush(Qt.green)
-        paint.drawRect(1, 1, 100, 100)
+        paint.drawEllipse(1, 1, 20, 20)
         paint.end()
-        #Le cercle vert refuse de s'afficher
+
+    def createInterface(self):
+        self.topLeftGroupBox = QGroupBox("Interface")
+        layout = QVBoxLayout()
 
         label1 = QLabel("Hexapode, avance")
         label2 = QLabel("Hexapode, recule")
