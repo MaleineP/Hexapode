@@ -33,9 +33,12 @@ class Interface(QDialog):
     def paintEvent(self, event = None):
         paint = QPainter()
         paint.begin(self)
-        paint.setPen(Qt.green)
+        paint.setPen(Qt.darkGreen)
         paint.setBrush(Qt.green)
         paint.drawEllipse(1, 1, 20, 20)
+        paint.setPen(Qt.black)
+        paint.setBrush(Qt.gray)
+        paint.drawEllipse(25, 1, 20, 20)
         paint.end()
 
     def createInterface(self):
