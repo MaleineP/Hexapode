@@ -1,8 +1,11 @@
+from logging import CRITICAL
+
+import pygame
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QGroupBox, QDialog, QGridLayout, QLabel, \
-    QStyle, QCheckBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QGroupBox, QDialog, QGridLayout, QLabel, \
+    QStyleFactory, QCheckBox, QMessageBox
+from PyQt5.QtCore import Qt, pyqtSlot
 
 
 class Interface(QDialog):
@@ -77,15 +80,56 @@ class Interface(QDialog):
 
         self.topLeftGroupBox.setLayout(layout)
 
-
-
-
-
     def createVideo(self):
         self.topRightGroupBox = QGroupBox("Retour Vidéo")
 
 
+@pyqtSlot()
+def onClick():
+    exit(0)
+
+
+last_axis = 3
+direction = "none"
 app = QApplication([])
+app.setStyle(QStyleFactory.create('Fusion'))
 interface = Interface()
+interface.setStyle(QStyleFactory.create('Fusion'))
 interface.show()
-app.exec_()
+
+
+pygame.init()
+stick = pygame.joystick.init()
+x = pygame.joystick.get_count()
+if x == 0:
+    message = QMessageBox()
+    message.setIcon(CRITICAL)
+    message.setText("Veuillez brancher un Joystick")
+    message.setWindowTitle("Erreur")
+    message.open()
+else:
+    app.exec_()
+    events = pygame.event.get()
+    for event in events:
+        if event == pygame.JOYAXISMOTION:
+            axis = event.axis
+            value = event.value
+            if last_axis == axis:
+                print("J'arrête de bouger")
+                direction = "none"
+            else:
+                if axis == 0:
+                    if value < 0:
+                        print("Je vais à gauche")
+                        direction = "left"
+                    if value > 0:
+                        print("Je vais à droite")
+                        direction = "right"
+                if axis == 1:
+                    if value < 0:
+                        print("J'avance")
+                        direction = "forward"
+                    if value > 0:
+                        print("Je recule")
+                        direction = "backward"
+
