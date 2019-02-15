@@ -1,25 +1,9 @@
-import time
+import basicMove as m
 #      _____
 # L1 <[     ]> R1
 # L2 <[     ]> R2
 # L3 <[_____]> R3
 #
-#
-
-
-def unfold_leg(side, number):
-    print(side+number+" depliee")
-    # soulever la patte
-    # déplier la patte (différent selon gauche ou droite ?)
-    # reposer la patte
-
-
-def fold_leg(side, number):
-    print(side+number+" repliee")
-    # soulever la patte
-    # replier la patte (différent selon gauche ou droite ?)
-    # reposer la patte
-
 
 def crab_right():
     fold_leg('g', 1)
