@@ -5,12 +5,12 @@ kit = ServoKit(channels=16)
 
 def main():
     # down / repos
-    # m.pos_down_1()
-    # m.pos_down_3()
-    # m.pos_down_5()
-    # m.pos_down_7()
-    # m.pos_down_9()
-    # m.pos_down_11()
+    pos_down_1(0)
+    pos_down_3(0)
+    pos_down_5(0)
+    pos_down_7(0)
+    pos_down_9(0)
+    pos_down_11(0)
     # Extérieur
     # m.pos_ext_1()
     # m.pos_ext_3()
@@ -26,12 +26,12 @@ def main():
     # m.pos_int_9()
     # m.pos_int_11()
     # mid / repos
-    # m.pos_mid_0()
-    # m.pos_mid_2()
-    # m.pos_mid_4()
-    # m.pos_mid_6()
-    # m.pos_mid_8()
-    # m.pos_mid_10()
+    pos_mid_0(0)
+    pos_mid_2(0)
+    pos_mid_4(0)
+    pos_mid_6(0)
+    pos_mid_8(0)
+    pos_mid_10(0)
     # front
     # m.pos_front_0()
     # m.pos_front_2()
@@ -46,9 +46,6 @@ def main():
     # m.pos_back_6()
     # m.pos_back_8()
     # m.pos_back_10()
-
-if __name__ == "__main__":
-    main()
 
 FEET_RIGHT_EXT = 150
 FEET_RIGHT_DOWN = 90
@@ -186,3 +183,7 @@ def pos_back_10(t):
     kit.servo[10].angle = LEG_LEFT_BACK
     time.sleep(t)
 
+
+if __name__ == "__main__":
+    main()
+    

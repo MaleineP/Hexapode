@@ -1,4 +1,4 @@
-import modulePI.basicMove as m
+import basicMove as m
 
 
 class Stop:
@@ -27,4 +27,4 @@ class Stop:
 
         m.pos_ext_11(0.5)
         m.pos_mid_10(0.5)
-        m.pos_down_1(0.5)
+        m.pos_down_11(0.5)

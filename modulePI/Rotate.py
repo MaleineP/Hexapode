@@ -1,5 +1,5 @@
 import time
-import modulePI.basicMove as m
+import basicMove as m
 
 
 class Rotate:

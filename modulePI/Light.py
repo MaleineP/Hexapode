@@ -8,11 +8,13 @@ class Light:
 
     @staticmethod
     def green_blink():
-        while True:
-            GPIO.output(17, False)
-            time.sleep(0.5)
+        i=0
+        while i<3:
             GPIO.output(17, True)
             time.sleep(0.5)
+            GPIO.output(17, False)
+            time.sleep(0.5)
+            i = i + 1
 
     @staticmethod
     def turn_on_green():

@@ -1,31 +1,28 @@
-import modulePI.basicMove as m
+import basicMove as m
 import time
 
 
 class Move:
 
-    # changer 0 en 0.5 ?
     @staticmethod
     def walk_forward():
         # on lève à gauche
-        m.pos_ext_11(0)
-        m.pos_ext_3(0)
-        m.pos_ext_7(0)
+        m.pos_ext_11(0.5)
+        m.pos_ext_3(0.5)
+        m.pos_ext_7(0.5)
         # on avance à gauche
-        m.pos_front_10(0)
-        m.pos_front_2(0)
-        m.pos_front_6(0)
+        m.pos_front_10(0.5)
+        m.pos_front_2(0.5)
+        m.pos_front_6(0.5)
         # on baisse à gauche
-        m.pos_down_11(0)
-        m.pos_down_3(0)
-        m.pos_down_7(0)
-        # on attend que la gauche soit baissée pour lever la droite
-        time.sleep(1)
-
+        m.pos_down_11(0.5)
+        m.pos_down_3(0.5)
+        m.pos_down_7(0.5)
+        
         # on lève à droite
-        m.pos_ext_1(0)
-        m.pos_ext_9(0)
-        m.pos_ext_5(0)
+        m.pos_ext_1(0.5)
+        m.pos_ext_9(0.5)
+        m.pos_ext_5(0.5)
 
         # on revient au centre à gauche
         m.pos_mid_10(0)
@@ -33,26 +30,28 @@ class Move:
         m.pos_mid_6(0)
 
         # on avance à droite
-        m.pos_front_0(0)
-        m.pos_front_8(0)
-        m.pos_front_4(0)
+        m.pos_front_0(0.5)
+        m.pos_front_8(0.5)
+        m.pos_front_4(0.5)
         # on baisse à droite
-        m.pos_down_1(0)
-        m.pos_down_9(0)
-        m.pos_down_5(0)
-        # on attend que la droite soit baissée pour lever la gauche
-        time.sleep(1)
+        m.pos_down_1(0.5)
+        m.pos_down_9(0.5)
+        m.pos_down_5(0.5)
 
         # on lève à gauche
-        m.pos_ext_11(0)
-        m.pos_ext_3(0)
-        m.pos_ext_7(0)
+        m.pos_ext_11(0.5)
+        m.pos_ext_3(0.5)
+        m.pos_ext_7(0.5)
 
         # on revient au centre à droite
         m.pos_mid_0(0)
         m.pos_mid_8(0)
         m.pos_mid_4(0)
-        time.sleep(1)
+
+        # on baisse à gauche
+        m.pos_down_3(0.5)
+        m.pos_down_7(0.5)
+        m.pos_down_11(0.5)
 
     # changer 0 en 0.5 ?
     @staticmethod

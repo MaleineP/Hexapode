@@ -1,4 +1,4 @@
-from modulePI.MainClass import MainClass
+from MainClass import MainClass
 
 
 def main():
