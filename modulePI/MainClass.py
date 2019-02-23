@@ -18,7 +18,7 @@ class MainClass:
         # Stop.clear_pos()
         # Rotate.rotate_left()
         # Rotate.rotate_right()
-        Move.walk_forward()
+        # Move.walk_forward()
         # Move.walk_backward()
         # Light.green_blink()
         # Light.turn_on_yellow()
