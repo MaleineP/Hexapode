@@ -9,9 +9,58 @@ from PyQt5.QtCore import Qt, pyqtSlot
 
 
 class Interface(QDialog):
+    def clearLayout(self, layout):
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
     def __init__(self):
         super(Interface, self).__init__(None)
+        global beginning
+        beginning = QDialog()
+        beginning.setWindowTitle("Démarrage de l'Hexapode")
+        layout = QGridLayout()
+        label = QLabel()
+        label.setText("Mettre l'hexapode sous tension via le port USB avec la batterie fournie")
+        button = QPushButton("Ok")
+        button.clicked.connect(self.next)
+        layout.addWidget(label)
+        layout.addWidget(button)
+        beginning.setLayout(layout)
+        beginning.show()
 
+    @pyqtSlot()
+    def next(self):
+        label = QLabel("La lumière verte doit clignoter.\nSi ce n'est pas le cas quitter le logiciel et se référer au manuel utilisateur")
+        button = QPushButton("Connexion")
+        button.clicked.connect(self.connexionPI)
+        self.clearLayout(beginning.layout())
+        beginning.layout().addWidget(label)
+        beginning.layout().addWidget(button)
+
+    @pyqtSlot()
+    def connexionPI(self):
+        label = QLabel("Connexion en cours...")
+        self.clearLayout(beginning.layout())
+        beginning.layout().addWidget(label)
+        beginning.show()
+
+    def connexionError(self):
+        label = QLabel("Une erreur est survenue, veuillez consulter le manuel utilisateur")
+        self.clearLayout(beginning.layout())
+        beginning.layout().addWidget(label)
+        button = QPushButton("Quitter")
+        button.clicked.connect(self.quit)
+        beginning.layout().addWidget(button)
+        beginning.show()
+
+    @pyqtSlot()
+    def quit(self):
+        beginning.done()
+        exit(0)
+
+    def connexionOK(self):
         self.createInterface()
         self.createVideo()
         self.createLabel()
@@ -22,7 +71,43 @@ class Interface(QDialog):
         mainLayout.addWidget(self.topLeftGroupBox, 1, 0)
         self.setLayout(mainLayout)
         self.setWindowTitle("Hexapode")
-
+        self.setStyle(QStyleFactory.create('Fusion'))
+        self.show()
+        pygame.init()
+        last_axis = 3
+        direction = "none"
+        stick = pygame.joystick.init()
+        x = pygame.joystick.get_count()
+        if x == 0:
+            message = QMessageBox()
+            message.setIcon(CRITICAL)
+            message.setText("Veuillez brancher un Joystick")
+            message.setWindowTitle("Erreur")
+            message.open()
+        else:
+            events = pygame.event.get()
+            for event in events:
+                if event == pygame.JOYAXISMOTION:
+                    axis = event.axis
+                    value = event.value
+                    if last_axis == axis:
+                        print("J'arrête de bouger")
+                        direction = "none"
+                    else:
+                        if axis == 0:
+                            if value < 0:
+                                print("Je vais à gauche")
+                                direction = "left"
+                            if value > 0:
+                                print("Je vais à droite")
+                                direction = "right"
+                        if axis == 1:
+                            if value < 0:
+                                print("J'avance")
+                                direction = "forward"
+                            if value > 0:
+                                print("Je recule")
+                                direction = "backward"
 
     def createLabel(self):
         label = QLabel("Hexapode")
@@ -31,7 +116,6 @@ class Interface(QDialog):
         myFont.setBold(True)
         label.setFont(myFont)
         self.label = label
-
 
     def paintEvent(self, event = None):
         paint = QPainter()
@@ -84,52 +168,10 @@ class Interface(QDialog):
         self.topRightGroupBox = QGroupBox("Retour Vidéo")
 
 
-@pyqtSlot()
-def onClick():
-    exit(0)
-
-
-last_axis = 3
-direction = "none"
 app = QApplication([])
 app.setStyle(QStyleFactory.create('Fusion'))
+
 interface = Interface()
-interface.setStyle(QStyleFactory.create('Fusion'))
-interface.show()
 
-
-pygame.init()
-stick = pygame.joystick.init()
-x = pygame.joystick.get_count()
-if x == 0:
-    message = QMessageBox()
-    message.setIcon(CRITICAL)
-    message.setText("Veuillez brancher un Joystick")
-    message.setWindowTitle("Erreur")
-    message.open()
-else:
-    app.exec_()
-    events = pygame.event.get()
-    for event in events:
-        if event == pygame.JOYAXISMOTION:
-            axis = event.axis
-            value = event.value
-            if last_axis == axis:
-                print("J'arrête de bouger")
-                direction = "none"
-            else:
-                if axis == 0:
-                    if value < 0:
-                        print("Je vais à gauche")
-                        direction = "left"
-                    if value > 0:
-                        print("Je vais à droite")
-                        direction = "right"
-                if axis == 1:
-                    if value < 0:
-                        print("J'avance")
-                        direction = "forward"
-                    if value > 0:
-                        print("Je recule")
-                        direction = "backward"
+app.exec_()
 
