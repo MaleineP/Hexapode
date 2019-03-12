@@ -1,4 +1,9 @@
 import socket
+from modulePI.Light import Light
+from modulePI.Move import Move
+from modulePI.Rotate import Rotate
+from modulePI.Initialize import Initialize
+from modulePI.Stop import Stop
 
 login = "serge"
 password = "delacompta"
@@ -6,21 +11,36 @@ password = "delacompta"
 hote = '192.168.1.24'
 port = 12800
 
-connexion_principale = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connexion_principale.bind((hote, port))
-connexion_principale.listen(5)
-print("Le serveur écoute à présent sur le port {}".format(port))
-
-connexion_avec_client, infos_connexion = connexion_principale.accept()
+principal_connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+principal_connexion.bind((hote, port))
+principal_connexion.listen(5)
+print("The server listen on port {}".format(port))
+connexion_to_pc, infos_connexion = principal_connexion.accept()
+Light.green_blink()
 
 msg_recu = b""
 while msg_recu != b"fin":
-    msg_recu = connexion_avec_client.recv(1024)
-    # L'instruction ci-dessous peut lever une exception si le message
-    # Réceptionné comporte des accents
+    msg_recu = connexion_to_pc.recv(1024)
     print(msg_recu.decode())
-    connexion_avec_client.send(b"5 / 5")
+    if msg_recu.decode() == login + " " + password:
+        Initialize.start_initialisation()
+        Light.turn_off_green()
+    elif msg_recu.decode() == "walk_forward":
+        Move.walk_forward()
+    elif msg_recu.decode() == "walk_backward":
+        Move.walk_backward()
+    elif msg_recu.decode() == "rotate_right":
+        Rotate.rotate_right()
+    elif msg_recu.decode() == "rotate_left":
+        Rotate.rotate_left()
+    elif msg_recu.decode() == "turn_on_yellow":
+        Light.turn_on_yellow()
+    elif msg_recu.decode() == "turn_off_yellow":
+        Light.turn_off_yellow()
+    else:
+        Stop.clear_pos()
+    connexion_to_pc.send(b"5 / 5")
 
-print("Fermeture de la connexion")
-connexion_avec_client.close()
-connexion_principale.close()
+print("Close connexion")
+connexion_to_pc.close()
+principal_connexion.close()
