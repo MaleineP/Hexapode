@@ -75,7 +75,6 @@ class Interface(QDialog):
         self.setStyle(QStyleFactory.create('Fusion'))
         self.show()
         pygame.init()
-        last_axis = 3
         direction = "none"
         stick = pygame.joystick.init()
         x = pygame.joystick.get_count()
@@ -86,29 +85,28 @@ class Interface(QDialog):
             message.setWindowTitle("Erreur")
             message.open()
         else:
-            events = pygame.event.get()
+            events = pygame.event.get(pygame.JOYAXISMOTION)
             for event in events:
-                if event == pygame.JOYAXISMOTION:
-                    axis = event.axis
-                    value = event.value
-                    if last_axis == axis:
-                        print("J'arrête de bouger")
-                        direction = "none"
-                    else:
-                        if axis == 0:
-                            if value < 0:
-                                print("Je vais à gauche")
-                                direction = "left"
-                            if value > 0:
-                                print("Je vais à droite")
-                                direction = "right"
-                        if axis == 1:
-                            if value < 0:
-                                print("J'avance")
-                                direction = "forward"
-                            if value > 0:
-                                print("Je recule")
-                                direction = "backward"
+                axis = event.axis
+                value = event.value
+                if (value < 0.005) & (value > -0.005):
+                    print("J'arrête de bouger")
+                    direction = "none"
+                else:
+                    if axis == 0:
+                        if value < 0:
+                            print("Je vais à gauche")
+                            direction = "left"
+                        if value > 0:
+                            print("Je vais à droite")
+                            direction = "right"
+                    if axis == 1:
+                        if value < 0:
+                            print("J'avance")
+                            direction = "forward"
+                        if value > 0:
+                            print("Je recule")
+                            direction = "backward"
 
     def createLabel(self):
         label = QLabel("Hexapode")
