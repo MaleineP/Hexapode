@@ -13,8 +13,8 @@ class MainClass:
     @staticmethod
     def main():
         Initialize.start_initialisation()
-        # connexion_to_pc = Connexion().get_instance()
-        # connexion_to_pc.run()
+        connexion_to_pc = Connexion().get_instance()
+        connexion_to_pc.start()
         # Stop.clear_pos()
         # Rotate.rotate_left()
         # Rotate.rotate_right()

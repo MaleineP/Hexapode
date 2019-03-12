@@ -1,5 +1,5 @@
 from logging import CRITICAL
-
+from ConnexionToPI import ConnexionToPI
 import pygame
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainter
@@ -41,6 +41,7 @@ class Interface(QDialog):
 
     @pyqtSlot()
     def connexionPI(self):
+        ConnexionToPI
         label = QLabel("Connexion en cours...")
         self.clearLayout(beginning.layout())
         beginning.layout().addWidget(label)
