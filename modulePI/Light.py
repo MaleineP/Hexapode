@@ -8,6 +8,8 @@ class Light:
 
     @staticmethod
     def green_blink():
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(17, GPIO.OUT)
         i=0
         while i<3:
             GPIO.output(17, True)
@@ -26,6 +28,7 @@ class Light:
 
     @staticmethod
     def turn_on_yellow():
+        GPIO.setup(5, GPIO.OUT)
         GPIO.output(5, True)
 
     @staticmethod

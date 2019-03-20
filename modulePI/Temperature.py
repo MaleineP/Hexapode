@@ -9,6 +9,7 @@ class Temperature:
     def get_temperature():
         sensor = W1ThermSensor()
         while True:
-            temperature = sensor.get_temperature()
-            print("The temperature is %s celsius" % temperature)
-            time.sleep(1)
+            return sensor.get_temperature()
+            #temperature = sensor.get_temperature()
+            #print("The temperature is %s celsius" % temperature)
+            #time.sleep(1)

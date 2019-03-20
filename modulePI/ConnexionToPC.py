@@ -1,14 +1,11 @@
 import socket
-from modulePI.Light import Light
-from modulePI.Move import Move
-from modulePI.Rotate import Rotate
-from modulePI.Initialize import Initialize
-from modulePI.Stop import Stop
+from Light import Light
+from Move import Move
+from Rotate import Rotate
+from Temperature import Temperature
+from Stop import Stop
 
-login = "serge"
-password = "delacompta"
-
-hote = '192.168.1.24'
+hote = '192.168.1.30'
 port = 12800
 
 principal_connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -17,13 +14,12 @@ principal_connexion.listen(5)
 print("The server listen on port {}".format(port))
 connexion_to_pc, infos_connexion = principal_connexion.accept()
 Light.green_blink()
-
+light_auto = True
 msg_recu = b""
 while msg_recu != b"fin":
     msg_recu = connexion_to_pc.recv(1024)
     print(msg_recu.decode())
     if msg_recu.decode() == login + " " + password:
-        Initialize.start_initialisation()
         Light.turn_off_green()
     elif msg_recu.decode() == "walk_forward":
         Move.walk_forward()
@@ -36,6 +32,14 @@ while msg_recu != b"fin":
     elif msg_recu.decode() == "turn_on_yellow":
         Light.turn_on_yellow()
     elif msg_recu.decode() == "turn_off_yellow":
+        Light.turn_off_yellow()
+    elif msg_recu.decode() == "light_auto_on":
+        light_auto = True
+    elif msg_recu.decode() == "light_auto_off":
+        light_auto = False
+    elif Temperature.get_temperature() < 19 and light_auto:
+        Light.turn_on_yellow()
+    elif Temperatur.get_temperature() >= 19 and light_auto:
         Light.turn_off_yellow()
     else:
         Stop.clear_pos()

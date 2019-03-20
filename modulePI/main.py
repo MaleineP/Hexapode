@@ -1,8 +1,8 @@
-from MainClass import MainClass
+import ConnexionToPC
 
 
 def main():
-    MainClass().main()
+    ConnexionToPC
 
 
 if __name__ == "__main__":
