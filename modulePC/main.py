@@ -1,6 +1,6 @@
 from logging import CRITICAL
-from ConnexionToPI import ConnexionToPI
 import pygame
+import modulePC.ConnexionToPI as c
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QApplication, QPushButton, QVBoxLayout, QGroupBox, QDialog, QGridLayout, QLabel, \
@@ -17,9 +17,9 @@ class Interface(QDialog):
 
     def __init__(self):
         super(Interface, self).__init__(None)
-        global beginning
-        beginning = QDialog()
-        beginning.setWindowTitle("Démarrage de l'Hexapode")
+        self.connexion = None
+        self.beginning = QDialog()
+        self.beginning.setWindowTitle("Démarrage de l'Hexapode")
         layout = QGridLayout()
         label = QLabel()
         label.setText("Mettre l'hexapode sous tension via le port USB avec la batterie fournie")
@@ -27,38 +27,43 @@ class Interface(QDialog):
         button.clicked.connect(self.next)
         layout.addWidget(label)
         layout.addWidget(button)
-        beginning.setLayout(layout)
-        beginning.show()
+        self.beginning.setLayout(layout)
+        self.beginning.show()
 
     @pyqtSlot()
     def next(self):
         label = QLabel("La lumière verte doit clignoter.\nSi ce n'est pas le cas quitter le logiciel et se référer au manuel utilisateur")
         button = QPushButton("Connexion")
         button.clicked.connect(self.connexionPI)
-        self.clearLayout(beginning.layout())
-        beginning.layout().addWidget(label)
-        beginning.layout().addWidget(button)
+        self.clearLayout(self.beginning.layout())
+        self.beginning.layout().addWidget(label)
+        self.beginning.layout().addWidget(button)
 
     @pyqtSlot()
     def connexionPI(self):
-        ConnexionToPI
         label = QLabel("Connexion en cours...")
-        self.clearLayout(beginning.layout())
-        beginning.layout().addWidget(label)
-        beginning.show()
+        self.clearLayout(self.beginning.layout())
+        self.beginning.layout().addWidget(label)
+        self.beginning.show()
+        self.connexion = c.ConnexionToPi()
+        self.connexion.__init__()
+        if self.connexion is None:
+            self.connexionError()
+        else:
+            self.connexionOK()
 
     def connexionError(self):
         label = QLabel("Une erreur est survenue, veuillez consulter le manuel utilisateur")
-        self.clearLayout(beginning.layout())
-        beginning.layout().addWidget(label)
+        self.clearLayout(self.beginning.layout())
+        self.beginning.layout().addWidget(label)
         button = QPushButton("Quitter")
         button.clicked.connect(self.quit)
-        beginning.layout().addWidget(button)
-        beginning.show()
+        self.beginning.layout().addWidget(button)
+        self.beginning.show()
 
     @pyqtSlot()
     def quit(self):
-        beginning.done()
+        self.beginning.done()
         exit(0)
 
     def connexionOK(self):
@@ -95,18 +100,16 @@ class Interface(QDialog):
                 else:
                     if axis == 0:
                         if value < 0:
-                            print("Je vais à gauche")
-                            direction = "left"
+                            direction = "rotate_left"
                         if value > 0:
-                            print("Je vais à droite")
-                            direction = "right"
+                            direction = "rotate_right"
                     if axis == 1:
                         if value < 0:
-                            print("J'avance")
-                            direction = "forward"
+                            direction = "walk_forward"
                         if value > 0:
-                            print("Je recule")
-                            direction = "backward"
+                            direction = "walk_backward"
+            if direction != "none":
+                self.connexion.send_message(direction)
 
     def createLabel(self):
         label = QLabel("Hexapode")
@@ -152,8 +155,13 @@ class Interface(QDialog):
         layout.addWidget(label9)
         layout.addWidget(label10)
 
-        light = QCheckBox("Lumières")
+        light = QCheckBox("Allumer les lumières")
+        light.stateChanged.connect(self.light_on_off(light.isChecked()))
         layout.addWidget(light)
+
+        light_auto = QCheckBox("Lumières automatiques")
+        light_auto.stateChanged.connect(self.light_automatic(light_auto.isChecked()))
+        layout.addWidget(light_auto)
 
         captor = QCheckBox("Capteur de distance")
         layout.addWidget(captor)
@@ -165,6 +173,20 @@ class Interface(QDialog):
 
     def createVideo(self):
         self.topRightGroupBox = QGroupBox("Retour Vidéo")
+
+    @pyqtSlot()
+    def light_on_off(self, checked):
+        if checked:
+            self.connexion.send_message("turn_on_yellow")
+        else:
+            self.connexion.send_message("turn_off_yellow")
+
+    @pyqtSlot()
+    def light_automatic(self, checked):
+        if checked:
+            self.connexion.send_message("light_auto_on")
+        else:
+            self.connexion.send_message("light_auto_off")
 
 
 app = QApplication([])
