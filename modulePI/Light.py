@@ -20,17 +20,24 @@ class Light:
 
     @staticmethod
     def turn_on_green():
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(17, GPIO.OUT)
         GPIO.output(17, True)
 
     @staticmethod
     def turn_off_green():
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(17, GPIO.OUT)
         GPIO.output(17, False)
 
     @staticmethod
     def turn_on_yellow():
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(5, GPIO.OUT)
         GPIO.output(5, True)
 
     @staticmethod
     def turn_off_yellow():
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(5, GPIO.OUT)
         GPIO.output(5, False)

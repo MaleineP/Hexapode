@@ -1,4 +1,5 @@
 import socket
+import time
 from Light import Light
 from Move import Move
 from Rotate import Rotate
@@ -12,16 +13,17 @@ principal_connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 principal_connexion.bind((hote, port))
 principal_connexion.listen(5)
 print("The server listen on port {}".format(port))
-connexion_to_pc, infos_connexion = principal_connexion.accept()
+Light.turn_on_green()
+time.sleep(0.5)
+Light.turn_off_green()
 Light.green_blink()
+connexion_to_pc, infos_connexion = principal_connexion.accept()
 light_auto = True
 msg_recu = b""
 while msg_recu != b"fin":
     msg_recu = connexion_to_pc.recv(1024)
     print(msg_recu.decode())
-    if msg_recu.decode() == login + " " + password:
-        Light.turn_off_green()
-    elif msg_recu.decode() == "walk_forward":
+    if msg_recu.decode() == "walk_forward":
         Move.walk_forward()
     elif msg_recu.decode() == "walk_backward":
         Move.walk_backward()
@@ -39,7 +41,7 @@ while msg_recu != b"fin":
         light_auto = False
     elif Temperature.get_temperature() < 19 and light_auto:
         Light.turn_on_yellow()
-    elif Temperatur.get_temperature() >= 19 and light_auto:
+    elif Temperature.get_temperature() >= 19 and light_auto:
         Light.turn_off_yellow()
     else:
         Stop.clear_pos()
