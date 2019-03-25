@@ -15,8 +15,6 @@ class ConnexionToPi:
         if message != "fin":
             msg_to_send = message.encode()
             self.connexion_to_pi.send(msg_to_send)
-            msg_recived = self.connexion_to_pi.recv(1024)
-            print(msg_recived.decode())  # Là encore, peut planter s'il y a des accents
         else:
             print("Fermeture de la connexion")
             self.connexion_to_pi.close()

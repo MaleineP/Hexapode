@@ -19,9 +19,7 @@ msg_recu = b""
 while msg_recu != b"fin":
     msg_recu = connexion_to_pc.recv(1024)
     print(msg_recu.decode())
-    if msg_recu.decode() == login + " " + password:
-        Light.turn_off_green()
-    elif msg_recu.decode() == "walk_forward":
+    if msg_recu.decode() == "walk_forward":
         Move.walk_forward()
     elif msg_recu.decode() == "walk_backward":
         Move.walk_backward()
@@ -39,7 +37,7 @@ while msg_recu != b"fin":
         light_auto = False
     elif Temperature.get_temperature() < 19 and light_auto:
         Light.turn_on_yellow()
-    elif Temperatur.get_temperature() >= 19 and light_auto:
+    elif Temperature.get_temperature() >= 19 and light_auto:
         Light.turn_off_yellow()
     else:
         Stop.clear_pos()
