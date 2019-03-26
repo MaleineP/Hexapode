@@ -1,5 +1,6 @@
 from logging import CRITICAL
 import pygame
+import time
 import modulePC.ConnexionToPI as c
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPainter
@@ -46,10 +47,12 @@ class Interface(QDialog):
         self.beginning.layout().addWidget(label)
         self.beginning.show()
         self.connexion = c.ConnexionToPi()
-        self.connexion.__init__()
+        #self.connexion.__init__()
         if self.connexion is None:
+            print("Connexion Error")
             self.connexionError()
         else:
+            print("Connexion OK")
             self.connexionOK()
 
     def connexionError(self):
@@ -67,6 +70,7 @@ class Interface(QDialog):
         exit(0)
 
     def connexionOK(self):
+        self.beginning.done(0)
         self.createInterface()
         self.createVideo()
         self.createLabel()
@@ -81,8 +85,10 @@ class Interface(QDialog):
         self.show()
         pygame.init()
         direction = "none"
-        stick = pygame.joystick.init()
+        pygame.joystick.init()
+        stick = pygame.joystick.Joystick(0)
         x = pygame.joystick.get_count()
+        stick.init()
         if x == 0:
             message = QMessageBox()
             message.setIcon(CRITICAL)
@@ -90,26 +96,29 @@ class Interface(QDialog):
             message.setWindowTitle("Erreur")
             message.open()
         else:
-            events = pygame.event.get(pygame.JOYAXISMOTION)
-            for event in events:
-                axis = event.axis
-                value = event.value
-                if (value < 0.005) & (value > -0.005):
-                    print("J'arrête de bouger")
-                    direction = "none"
-                else:
-                    if axis == 0:
-                        if value < 0:
-                            direction = "rotate_left"
-                        if value > 0:
-                            direction = "rotate_right"
-                    if axis == 1:
-                        if value < 0:
-                            direction = "walk_forward"
-                        if value > 0:
-                            direction = "walk_backward"
-            if direction != "none":
-                self.connexion.send_message(direction)
+            print("Joystick OK")
+            while True:
+                events = pygame.event.get(pygame.JOYAXISMOTION)
+                for event in events:
+                    axis = event.axis
+                    value = event.value
+                    if (value < 0.005) & (value > -0.005):
+                        print("J'arrête de bouger")
+                        direction = "none"
+                    else:
+                        if axis == 0:
+                            if value < 0:
+                                direction = "rotateleft"
+                            if value > 0:
+                                direction = "rotateright"
+                        if axis == 1:
+                            if value < 0:
+                                direction = "walkforward"
+                            if value > 0:
+                                direction = "walkbackward"
+                    if direction != "none":
+                        self.connexion.send_message(direction)
+                        time.sleep(0.25)
 
     def createLabel(self):
         label = QLabel("Hexapode")
@@ -156,11 +165,11 @@ class Interface(QDialog):
         layout.addWidget(label10)
 
         light = QCheckBox("Allumer les lumières")
-        light.stateChanged.connect(self.light_on_off(light.isChecked()))
+        #light.stateChanged.connect(self.light_on_off(light.isChecked()))
         layout.addWidget(light)
 
         light_auto = QCheckBox("Lumières automatiques")
-        light_auto.stateChanged.connect(self.light_automatic(light_auto.isChecked()))
+        #light_auto.stateChanged.connect(self.light_automatic(light_auto.isChecked()))
         layout.addWidget(light_auto)
 
         captor = QCheckBox("Capteur de distance")
@@ -177,16 +186,16 @@ class Interface(QDialog):
     @pyqtSlot()
     def light_on_off(self, checked):
         if checked:
-            self.connexion.send_message("turn_on_yellow")
+            self.connexion.send_message("turnonyellow")
         else:
-            self.connexion.send_message("turn_off_yellow")
+            self.connexion.send_message("turnoffyellow")
 
     @pyqtSlot()
     def light_automatic(self, checked):
         if checked:
-            self.connexion.send_message("light_auto_on")
+            self.connexion.send_message("lightautoon")
         else:
-            self.connexion.send_message("light_auto_off")
+            self.connexion.send_message("lightautooff")
 
 
 app = QApplication([])
