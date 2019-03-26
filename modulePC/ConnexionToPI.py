@@ -1,24 +1,20 @@
 import socket
 
-login = "serge"
-password = "delacompta"
 
-hote = "192.168.1.19"
-port = 12800
+class ConnexionToPi:
 
-connexion_avec_serveur = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connexion_avec_serveur.connect((hote, port))
-print("Connexion établie avec le serveur sur le port {}".format(port))
+    def __init__(self):
+        self.msg_to_send = b""
+        hote = "192.168.1.30"
+        port = 12800
+        self.connexion_to_pi = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.connexion_to_pi.connect((hote, port))
+        print("Connexion established with the serveur on the port {}".format(port))
 
-msg_a_envoyer = b""
-while msg_a_envoyer != b"fin":
-    msg_a_envoyer = input("> ")
-    # Peut planter si vous tapez des caractères spéciaux
-    msg_a_envoyer = msg_a_envoyer.encode()
-    # On envoie le message
-    connexion_avec_serveur.send(msg_a_envoyer)
-    msg_recu = connexion_avec_serveur.recv(1024)
-    print(msg_recu.decode())  # Là encore, peut planter s'il y a des accents
-
-print("Fermeture de la connexion")
-connexion_avec_serveur.close()
+    def send_message(self, message):
+        if message != "fin":
+            msg_to_send = message.encode()
+            self.connexion_to_pi.send(msg_to_send)
+        else:
+            print("Fermeture de la connexion")
+            self.connexion_to_pi.close()
