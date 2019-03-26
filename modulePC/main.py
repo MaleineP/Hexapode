@@ -47,7 +47,6 @@ class Interface(QDialog):
         self.beginning.layout().addWidget(label)
         self.beginning.show()
         self.connexion = c.ConnexionToPi()
-        #self.connexion.__init__()
         if self.connexion is None:
             print("Connexion Error")
             self.connexionError()
@@ -165,11 +164,11 @@ class Interface(QDialog):
         layout.addWidget(label10)
 
         light = QCheckBox("Allumer les lumières")
-        #light.stateChanged.connect(self.light_on_off(light.isChecked()))
+        light.stateChanged.connect(lambda: self.light_on_off(light.isChecked()))
         layout.addWidget(light)
 
         light_auto = QCheckBox("Lumières automatiques")
-        #light_auto.stateChanged.connect(self.light_automatic(light_auto.isChecked()))
+        light_auto.stateChanged.connect(lambda: self.light_automatic(light_auto.isChecked()))
         layout.addWidget(light_auto)
 
         captor = QCheckBox("Capteur de distance")
@@ -183,14 +182,12 @@ class Interface(QDialog):
     def createVideo(self):
         self.topRightGroupBox = QGroupBox("Retour Vidéo")
 
-    @pyqtSlot()
     def light_on_off(self, checked):
         if checked:
             self.connexion.send_message("turnonyellow")
         else:
             self.connexion.send_message("turnoffyellow")
 
-    @pyqtSlot()
     def light_automatic(self, checked):
         if checked:
             self.connexion.send_message("lightautoon")
