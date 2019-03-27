@@ -6,7 +6,7 @@ from Rotate import Rotate
 from Temperature import Temperature
 from Stop import Stop
 
-hote = '192.168.43.99'
+hote = '192.168.1.30'
 port = 12800
 
 principal_connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,11 +19,14 @@ Light.turn_off_green()
 Light.green_blink()
 connexion_to_pc, infos_connexion = principal_connexion.accept()
 print("infos : " + str(infos_connexion))
-light_auto = True
+light_auto = False
 msg_recu = b""
 while msg_recu != b"fin":
+    print("light_auto : " + str(light_auto))
+    temp = Temperature.get_temperature()
+    print("temp : " + str(temp))
     msg_recu = connexion_to_pc.recv(1024)
-    print(msg_recu.decode())
+    print("msg_recieved : " + msg_recu.decode())
     if msg_recu.decode() == "walkforward":
         Move.walk_forward()
     elif msg_recu.decode() == "walkbackward":
@@ -40,15 +43,12 @@ while msg_recu != b"fin":
         light_auto = True
     elif msg_recu.decode() == "lightautooff":
         light_auto = False
-    elif Temperature.get_temperature() < 19 and light_auto:
-        Light.turn_on_yellow()
-    elif Temperature.get_temperature() >= 19 and light_auto:
-        Light.turn_off_yellow()
     else:
         Stop.clear_pos()
-    #print("envoie 5/5")
-    #connexion_to_pc.send(b"5 / 5")
 
-print("Close connexion")
-connexion_to_pc.close()
+    if temp >= 19 and light_auto:
+        Light.turn_on_yellow()
+    elif temp < 19 and light_auto:
+        Light.turn_off_yellow()
+
 principal_connexion.close()
