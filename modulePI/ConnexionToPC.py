@@ -6,7 +6,7 @@ from Rotate import Rotate
 from Temperature import Temperature
 from Stop import Stop
 
-hote = '192.168.1.30'
+hote = '192.168.43.99'
 port = 12800
 
 principal_connexion = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -44,11 +44,12 @@ while msg_recu != b"fin":
     elif msg_recu.decode() == "lightautooff":
         light_auto = False
     else:
-        Stop.clear_pos()
+        print("Clear position")
+        #Stop.clear_pos()
 
-    if temp >= 19 and light_auto:
+    if temp >= 21 and light_auto:
         Light.turn_on_yellow()
-    elif temp < 19 and light_auto:
+    elif temp < 21 and light_auto:
         Light.turn_off_yellow()
 
 principal_connexion.close()
